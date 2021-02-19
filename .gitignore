@@ -1,0 +1,7 @@
+/bin/
+/.gradle/
+/.settings/
+/.project
+/.classpath
+/libs/ghidra*
+/build

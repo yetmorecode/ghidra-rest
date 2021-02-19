@@ -1,0 +1,47 @@
+plugins {
+	id 'application'
+    id 'java'
+	id 'eclipse'
+	id 'org.springframework.boot' version '2.3.2.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+}
+
+repositories {
+    jcenter()
+}
+
+configurations {
+    compile.exclude module: 'spring-boot-starter-logging'
+}
+
+dependencies {
+    compile fileTree(dir: "libs", includes: ['**/*.jar'])
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+}
+
+task sources {
+	group 'ghidra'
+	doLast {
+		sourceSets.each {
+		    println(it)
+		    it.allSource.each {
+		        println(it)
+		    }
+		}
+
+	}
+}
+
+		
+
+task deps(dependsOn: configurations.compileClasspath) {
+	group 'ghidra'
+    doLast {
+    	fileTree(dir: "libs", include: '**/*.jar').each {File file ->
+    		println file
+		}
+        println "classpath = ${configurations.compileClasspath.collect { File file -> file.name }}"
+    }
+}
+
+mainClassName = 'com.foo.Bar'
