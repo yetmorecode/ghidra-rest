@@ -1,7 +1,5 @@
 package yetmorecode.ghidrarest.controller;
 
-import java.util.Iterator;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,17 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import ghidra.program.model.address.Address;
-import ghidra.program.model.address.AddressFormatException;
-import ghidra.program.model.address.AddressIterator;
-import ghidra.program.model.address.AddressRange;
-import ghidra.program.model.address.AddressRangeIterator;
 import ghidra.program.model.address.AddressSet;
-import ghidra.program.model.address.AddressSetView;
-import ghidra.program.model.address.GenericAddress;
-import ghidra.program.model.listing.Data;
 import ghidra.program.model.listing.Instruction;
-import ghidra.program.util.DefinedDataIterator;
 import yetmorecode.ghidrarest.util.GhidraUtils;
 
 @RestController

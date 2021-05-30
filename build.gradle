@@ -32,8 +32,6 @@ task sources {
 	}
 }
 
-		
-
 task deps(dependsOn: configurations.compileClasspath) {
 	group 'ghidra'
     doLast {
@@ -44,4 +42,31 @@ task deps(dependsOn: configurations.compileClasspath) {
     }
 }
 
-mainClassName = 'com.foo.Bar'
+task downloadGhidra {
+    group 'ghidra'
+    doLast {
+        def f = new File(projectDir.getAbsolutePath() + '/libs/' + ghidraArchive)
+        if (!f.isFile()) {
+            println "Downloading ghidra distribution to " + f.getAbsolutePath()
+            new URL('https://ghidra-sre.org/' + name + '.zip').withInputStream{ i -> f.withOutputStream{ it << i }}
+            println "Downloading ghidra done"
+        }
+        println "done!"
+    }
+}
+
+task unzip(type: Copy) {
+    group 'ghidra'
+    def zipFile = file(projectDir.getAbsolutePath() + '/libs/' + ghidraArchive)
+    def outputDir = file(projectDir.getAbsolutePath() + '/libs')
+ 
+    from(zipTree(zipFile)) {
+        include '**/Ghidra/Framework/**'
+        include '**/Ghidra/Features/Base/**'
+        include '**/Ghidra/Features/VersionTracking/**'
+    }
+    into outputDir
+    includeEmptyDirs = false
+}
+
+mainClassName = 'yetmorecode.ghidrarest.GhidraRestApplication'

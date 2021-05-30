@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,15 +19,21 @@ import com.google.gson.JsonObject;
 import yetmorecode.ghidrarest.util.GhidraUtils;
 
 @RestController
+@Configuration
 public class ProjectController {
 	
-	public ProjectController() {
+	 
+	String projectDir;
+
+	@Autowired
+	public ProjectController(@Value("${ghidra.projectDir}") String projectDir) {
+		this.projectDir = projectDir;
 		
 		long start = System.currentTimeMillis();
 		projectFiles = findProjectFiles();
 		long finish = System.currentTimeMillis();
 		long timeElapsed = finish - start;
-		System.out.println("ProjectController: project file lookup took " + timeElapsed + "ms");
+		System.out.println("ProjectController: project files lookup took " + timeElapsed + "ms");
 		
 	}
 	
@@ -79,16 +90,13 @@ public class ProjectController {
 	}
 	
 	private ArrayList<File> findProjectFiles() {
-		String directories[] = new String[] {
-			"D:\\Games",
-			"D:\\eclipse-ghidra-workspace"
-		};
 		var files = new ArrayList<File>();
-		for (var d : directories) {
-			var directoryFiles = FileUtils.listFiles(new File(d), new String[] {"gpr"}, true);
+		if (this.projectDir != null) {
+			System.out.println("project dir: " + this.projectDir);
+			var directoryFiles = FileUtils.listFiles(new File(this.projectDir), new String[] {"gpr"}, true);
 			for (var df : directoryFiles) {
 				files.add(df);
-			}
+			}			
 		}
 		return files;
 	}

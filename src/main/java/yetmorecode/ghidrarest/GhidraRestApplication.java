@@ -5,7 +5,6 @@ import javax.annotation.PreDestroy;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import ghidra.framework.plugintool.util.PluginClassManager;
 import yetmorecode.ghidrarest.ghidra.HeadlessRestRun;
 import yetmorecode.ghidrarest.ghidra.Launcher;
 import yetmorecode.ghidrarest.util.GhidraUtils;
@@ -16,14 +15,14 @@ public class GhidraRestApplication {
 
 	public static HeadlessRestRun launch;
 	
-	
 	public static void main(String[] args) {
 		try {
-			System.out.println("ClassLoader in use: " + ClassLoader.getSystemClassLoader().getClass().toString());
+			// Launch a headless ghidra instance
 			launch = (HeadlessRestRun) Launcher.main(new String[] {"yetmorecode.ghidrarest.ghidra.HeadlessRestRun"});
+			
+			// Launch the REST server
 			SpringApplication.run(GhidraRestApplication.class, args);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -31,8 +30,7 @@ public class GhidraRestApplication {
 	@PreDestroy
 	public void onExit() {
 		System.out.println("Shutting down Ghidra.. ");
-		try {
-			
+		try {		
 			if (GhidraUtils.currentProgram != null) {
 				System.out.println("Program still open: " + GhidraUtils.currentProgram.getName() + ".");
 			}
@@ -44,7 +42,6 @@ public class GhidraRestApplication {
 			launch.mainThread.join();
 			System.out.println("success");
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			System.out.println("failed:");
 			e.printStackTrace();
 		}

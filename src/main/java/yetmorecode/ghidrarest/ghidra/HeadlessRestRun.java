@@ -17,10 +17,7 @@ import ghidra.framework.plugintool.Plugin;
 import ghidra.framework.plugintool.util.PluginClassManager;
 import ghidra.framework.project.DefaultProjectManager;
 import ghidra.framework.remote.InetNameLookup;
-import ghidra.framework.store.LockException;
-import ghidra.util.NotOwnerException;
 import ghidra.util.SystemUtilities;
-import ghidra.util.exception.NotFoundException;
 
 public class HeadlessRestRun implements GhidraLaunchable {
 
@@ -38,6 +35,7 @@ public class HeadlessRestRun implements GhidraLaunchable {
 		
 		Runnable mainTask = () -> {
 			System.out.println("Hello Ghidra run");
+			//System.out.println("ClassLoader in use: " + ClassLoader.getSystemClassLoader().getClass().toString());
 			
 			ApplicationConfiguration configuration = new HeadlessRestConfiguration();
 				

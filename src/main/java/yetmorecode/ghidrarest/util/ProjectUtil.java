@@ -1,8 +1,5 @@
 package yetmorecode.ghidrarest.util;
 
-import ghidra.app.script.GhidraState;
-import ghidra.app.services.ProgramManager;
-import ghidra.framework.plugintool.PluginTool;
 import ghidra.program.model.listing.Program;
 
 public class ProjectUtil {
