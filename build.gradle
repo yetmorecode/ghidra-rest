@@ -1,9 +1,9 @@
 plugins {
-	id 'application'
+    id 'application'
     id 'java'
-	id 'eclipse'
-	id 'org.springframework.boot' version '2.3.2.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'eclipse'
+    id 'org.springframework.boot' version '2.3.2.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 }
 
 repositories {
@@ -20,16 +20,15 @@ dependencies {
 }
 
 task sources {
-	group 'ghidra'
-	doLast {
-		sourceSets.each {
-		    println(it)
-		    it.allSource.each {
-		        println(it)
-		    }
-		}
-
-	}
+    group 'ghidra'
+    doLast {
+        sourceSets.each {
+            println(it)
+            it.allSource.each {
+                println(it)
+            }
+        }
+    }
 }
 
 task deps(dependsOn: configurations.compileClasspath) {
@@ -47,16 +46,18 @@ task downloadGhidra {
     doLast {
         def f = new File(projectDir.getAbsolutePath() + '/libs/' + ghidraArchive)
         if (!f.isFile()) {
-            println "Downloading ghidra distribution to " + f.getAbsolutePath()
-            new URL('https://ghidra-sre.org/' + name + '.zip').withInputStream{ i -> f.withOutputStream{ it << i }}
-            println "Downloading ghidra done"
+            print "Downloading ghidra distribution to " + f.getAbsolutePath() + ".. "
+            new URL('https://ghidra-sre.org/' + ghidraArchive).withInputStream{ i -> f.withOutputStream{ it << i }}
+            println "finished"
+        } else {
+            println "Ghidra distribution already exists: " + f.getAbsolutePath()
         }
-        println "done!"
     }
 }
 
-task unzip(type: Copy) {
+task setupGhidra(type: Copy) {
     group 'ghidra'
+    dependsOn 'downloadGhidra'
     def zipFile = file(projectDir.getAbsolutePath() + '/libs/' + ghidraArchive)
     def outputDir = file(projectDir.getAbsolutePath() + '/libs')
  
